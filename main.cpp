@@ -1,31 +1,31 @@
 #include <iostream>
 
-// Анонимное пространство имен для всех констант (как требует задание)
+// Анонимное пространство имен для всех констант
 namespace {
-    const int MIN_HOUR = 0;
-    const int MAX_HOUR = 23;
-    const int MIN_MINUTE = 0;
-    const int MAX_MINUTE = 59;
-    
-    const int MORNING_START = 5;
-    const int DAY_START = 12;
-    const int EVENING_START = 18;
-    
-    const int HOURS_IN_HALF_DAY = 12;
-    
-    const int MOD_TEN = 10;
-    const int MOD_HUNDRED = 100;
-    const int EXCEPTION_TEENS_START = 11;
-    const int EXCEPTION_TEENS_END = 14;
-    
-    const int ENDING_SINGLE = 1;
-    const int ENDING_FEW_START = 2;
-    const int ENDING_FEW_END = 4;
-}
+const int MIN_HOUR = 0;
+const int MAX_HOUR = 23;
+const int MIN_MINUTE = 0;
+const int MAX_MINUTE = 59;
+
+const int MORNING_START = 5;
+const int DAY_START = 12;
+const int EVENING_START = 18;
+
+const int HOURS_IN_HALF_DAY = 12;
+
+const int MOD_TEN = 10;
+const int MOD_HUNDRED = 100;
+const int EXCEPTION_TEENS_START = 11;
+const int EXCEPTION_TEENS_END = 14;
+
+const int ENDING_SINGLE = 1;
+const int ENDING_FEW_START = 2;
+const int ENDING_FEW_END = 4;
+}  // namespace
 
 int main() {
     int hours, minutes;
-    
+
     // Ввод и проверка на корректность типов данных
     if (!(std::cin >> hours >> minutes)) {
         std::cout << "введены недопустимые данные\n";
@@ -66,10 +66,10 @@ int main() {
         std::cout << "часов";
     }
 
-    // Вывод минут (если они не равны нулю)
+    // Вывод минут если они не равны нулю
     if (minutes > MIN_MINUTE) {
         std::cout << " " << minutes << " ";
-        
+
         int last_digit = minutes % MOD_TEN;
         int last_two = minutes % MOD_HUNDRED;
 
