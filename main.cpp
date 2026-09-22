@@ -24,7 +24,8 @@ const int ENDING_FEW_END = 4;
 }  // namespace
 
 int main() {
-    int hours, minutes;
+    int hours=0;
+    int  minutes=0;
 
     // Ввод и проверка на корректность типов данных
     if (!(std::cin >> hours >> minutes)) {
