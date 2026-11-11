@@ -1,34 +1,23 @@
-on: push
-
+name: C++ checks
+on: [push, pull_request]
+permissions:
+  contents: read
 jobs:
-  build-and-clang-tidy:
+  build:
     runs-on: ubuntu-latest
-    container: ghcr.io/iraspa/ubuntu-22-llvm-18:latest
     steps:
-      - name: Setup clang-tidy
-        run: apt install -y clang-tidy
-
-      - name: Setup CMake
-        uses: jwlawson/actions-setup-cmake@v2
-
-      - name: Checkout project
-        uses: actions/checkout@v4
-
-      - name: Build project and run clang-tidy
-        uses: threeal/cmake-action@v2
-
+      - uses: actions/checkout@v4
+      - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+      - run: cmake --build build
   clang-format:
     runs-on: ubuntu-latest
-    container: ghcr.io/iraspa/ubuntu-22-llvm-18:latest
+    container: ghcr.io/cpp-linter/clang-tools:18
     steps:
-      - name: Setup CMake
-        uses: jwlawson/actions-setup-cmake@v2
-
-      - name: Checkout project
-        uses: actions/checkout@v4
-
-      - name: Run clang-format only
-        uses: threeal/cmake-action@v2
-        with:
-          build-args: |
-            --target clang-format
+      - uses: actions/checkout@v4
+      - run: clang-format --dry-run -Werror *.cpp *.hpp
+  clang-tidy:
+    runs-on: ubuntu-latest
+    container: ghcr.io/cpp-linter/clang-tools:18
+    steps:
+      - uses: actions/checkout@v4
+      - run: clang-tidy *.cpp -- -std=c++20
