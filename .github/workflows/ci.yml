@@ -1,22 +1,23 @@
-on: push
-
+name: C++ checks
+on: [push, pull_request]
+permissions:
+  contents: read
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: g++ -std=c++20 -Wall -Wextra -Werror -Wpedantic *.cpp
-
+      - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+      - run: cmake --build build
   clang-format:
     runs-on: ubuntu-latest
     container: ghcr.io/cpp-linter/clang-tools:18
     steps:
-    - uses: actions/checkout@v4
-    - run: clang-format --dry-run -Werror *.cpp
-
+      - uses: actions/checkout@v4
+      - run: clang-format --dry-run -Werror *.cpp *.hpp
   clang-tidy:
     runs-on: ubuntu-latest
     container: ghcr.io/cpp-linter/clang-tools:18
     steps:
-    - uses: actions/checkout@v4
-    - run: clang-tidy *.cpp
+      - uses: actions/checkout@v4
+      - run: clang-tidy *.cpp -- -std=c++20
