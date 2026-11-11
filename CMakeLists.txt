@@ -1,0 +1,26 @@
+cmake_minimum_required(VERSION 3.20)
+project(lab_1 LANGUAGES CXX)
+set(SOURCES
+    main.cpp
+)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+add_executable(${PROJECT_NAME} ${SOURCES})
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Werror -Wpedantic)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+option(ENABLE_SANITIZERS "Check memory and undefined behavior" OFF)
+if(ENABLE_SANITIZERS)
+    target_compile_options(${PROJECT_NAME} PRIVATE -fsanitize=address,undefined -fno-omit-frame-pointer)
+    target_link_options(${PROJECT_NAME} PRIVATE -fsanitize=address,undefined)
+endif()
+find_program(CLANG_FORMAT NAMES clang-format HINTS "${CMAKE_SOURCE_DIR}/.tools/bin")
+find_program(CLANG_TIDY NAMES clang-tidy HINTS "${CMAKE_SOURCE_DIR}/.tools/bin")
+if(CLANG_FORMAT)
+    add_custom_target(clang-format COMMAND ${CLANG_FORMAT} --dry-run -Werror
+        ${SOURCES}  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+endif()
+if(CLANG_TIDY)
+    add_custom_target(clang-tidy COMMAND ${CLANG_TIDY} -p ${CMAKE_BINARY_DIR}
+        ${SOURCES} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+endif()

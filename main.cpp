@@ -21,6 +21,18 @@ const int EXCEPTION_TEENS_END = 14;
 const int ENDING_SINGLE = 1;
 const int ENDING_FEW_START = 2;
 const int ENDING_FEW_END = 4;
+[[nodiscard]] bool ReadTime(int& hours, int& minutes) {
+    if (!(std::cin >> hours >> minutes)) {
+        return false;
+    }
+    char extra = '\0';
+    while (std::cin.get(extra) && extra != '\n') {
+        if (extra != ' ' && extra != '\t' && extra != '\r') {
+            return false;
+        }
+    }
+    return true;
+}
 }  // namespace
 
 int main() {
@@ -28,7 +40,7 @@ int main() {
     int minutes = 0;
 
     // Ввод и проверка на корректность типов данных
-    if (!(std::cin >> hours >> minutes)) {
+    if (!ReadTime(hours, minutes)) {
         std::cout << "введены недопустимые данные\n";
         return 0;
     }
@@ -71,8 +83,8 @@ int main() {
     if (minutes > MIN_MINUTE) {
         std::cout << " " << minutes << " ";
 
-        int last_digit = minutes % MOD_TEN;
-        int last_two = minutes % MOD_HUNDRED;
+        const int last_digit = minutes % MOD_TEN;
+        const int last_two = minutes % MOD_HUNDRED;
 
         // Склонение слова "минута"
         if (last_two >= EXCEPTION_TEENS_START && last_two <= EXCEPTION_TEENS_END) {
